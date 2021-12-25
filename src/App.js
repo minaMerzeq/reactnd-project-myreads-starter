@@ -4,6 +4,7 @@ import './App.css';
 import { Route, Routes } from 'react-router-dom';
 import MyReads from './pages/MyReads';
 import AddBook from './pages/AddBook';
+import NotFound from './pages/NotFound';
 
 class BooksApp extends React.Component {
   state = {
@@ -22,13 +23,8 @@ class BooksApp extends React.Component {
   }
 
   changeShelf = (book, shelf) => {
-    let exists = false;
-    this.state.books.forEach(b => {
-      if(b.id === book.id)
-        exists = true;
-    });
-    
-    if(!exists)
+    const b = this.state.books.find(({id}) => id === book.id);
+    if(!b)
       this.setState(prevState => ({books: [...prevState.books, book]}));
     
     BooksAPI.update(book, shelf)
@@ -46,6 +42,7 @@ class BooksApp extends React.Component {
         <Routes>
           <Route path="/" element={<MyReads books={this.state.books} changeShelf={this.changeShelf} />} />
           <Route path="/search" element={<AddBook changeShelf={this.changeShelf} shelfsBooks={this.state.books} />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
     )

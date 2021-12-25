@@ -46,11 +46,10 @@ export default class AddBook extends Component {
         <div className="search-books-results">
           <ol className="books-grid">
             {this.state.books.length ? this.state.books.map(book => {
-              this.props.shelfsBooks.forEach(b => {
-                if(b.id === book.id){
-                  book.shelf = b.shelf;
-                }
-              });
+              const b = this.props.shelfsBooks.find(({id}) => id === book.id)
+              if(b)
+                book.shelf = b.shelf;
+
               if(book.shelf === undefined)
                 book.shelf = "none";
               
